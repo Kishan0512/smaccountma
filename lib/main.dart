@@ -175,7 +175,7 @@ class dashbord extends StatelessWidget {
                                         color: Colors.grey.shade100,
                                         borderRadius: BorderRadius.circular(10)),
                                     child: Text(
-                                        "Credit(↑)\n₹${c.credit.value[index]}"),
+                                        "Credit(↑)\n₹"),
                                   )),
                                   Expanded(
                                       child: Container(
@@ -187,7 +187,7 @@ class dashbord extends StatelessWidget {
                                               borderRadius:
                                                   BorderRadius.circular(10)),
                                           child: Text(
-                                              "Debit(↓)\n₹${c.debit.value[index]}"))),
+                                              "Debit(↓)\n₹"))),
                                   Expanded(
                                       child: Container(
                                           alignment: Alignment.center,
@@ -198,7 +198,7 @@ class dashbord extends StatelessWidget {
                                               borderRadius:
                                                   BorderRadius.circular(10)),
                                           child: Text(
-                                            "Balance\n₹${c.balance.value[index]}",
+                                            "Balance\n₹",
                                             style: TextStyle(color: Colors.white),
                                           ))),
                                 ],

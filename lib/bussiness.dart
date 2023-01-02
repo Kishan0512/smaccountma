@@ -22,24 +22,20 @@ Future get_database()
         onCreate: (Database db, int version) async {
           // When creating the db, create the table
           await db.execute(
-              'CREATE TABLE demo (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT,credit INTEGER,debit INTEGER,balance INTEGER)');
+              'CREATE TABLE demo (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)');
         });
   }
   Future get_account()async
   {
     name.value.clear();
-    credit.value.clear();
-    debit.value.clear();
-    balance.value.clear();
+
     id.value.clear();
     temp.value=false;
     String qur="select * from demo";
     m = await database!.rawQuery(qur);
       m.forEach((element) {
         name.add(element['name']);
-        credit.add(element['credit']);
-        debit.add(element['debit']);
-        balance.add(element['balance']);
+
         id.add(element['id']);
       });
       temp.value=true;
@@ -47,7 +43,7 @@ Future get_database()
   }
   add_account(String name1)
   {
-    String qur="insert into demo values(null,'$name1','0','0','0')";
+    String qur="insert into demo values(null,'$name1')";
     database!.rawInsert(qur);
   }
   delete_account(int id1)
