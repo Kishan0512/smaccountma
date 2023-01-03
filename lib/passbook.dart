@@ -33,9 +33,7 @@ class passbook extends StatelessWidget {
                           actions: [
                             Row(
                               children: [
-
                                 Expanded(child:  Container(child: TextField(controller: c.t,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),)),
-
                                 IconButton(onPressed: () async {
                                   date= await showDatePicker(context: context, initialDate: DateTime.now(), firstDate:DateTime(2000) , lastDate: DateTime(2025));
                                   if(date!=null)
@@ -43,6 +41,17 @@ class passbook extends StatelessWidget {
                                    c.t.text=DateTime.now().toString().substring(0,10);
                                   }}, icon:Icon(Icons.date_range)),
                               ],),
+                            Obx( ()=> Row(children: [
+                                Radio(value: "c", groupValue: c.gen.value, onChanged: (value) {
+                                  c.gen.value=value! as String;
+                                },),
+                                Text("Credit(+)",style: TextStyle(fontSize: 20),),
+                                Radio(value: "d", groupValue: c.gen.value, onChanged: (value) {
+                                  c.gen.value=value! as String;
+                                },),
+                              Text("Debit(-)",style: TextStyle(fontSize: 20),),
+                              ],),
+                            ),
                             TextField(keyboardType: TextInputType.number,controller: t2,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),decoration: InputDecoration(hintText: "Amount")),
                             TextField(controller: t3,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),decoration: InputDecoration(hintText: "Particular")),
                             Row(mainAxisAlignment: MainAxisAlignment.end,children: [
@@ -52,7 +61,12 @@ class passbook extends StatelessWidget {
                                       Navigator.pop(context);
                               }, child: Text("CANCEL",style: TextStyle(fontSize: 20),)),
                               TextButton(style: ButtonStyle(backgroundColor: MaterialStateColor.resolveWith((states) => Colors.purple.shade900)),onPressed: () {
-
+                                        String date,part,id1,type;
+                                        int amount=int.parse(t2.text.toString());
+                                        part=t3.text;
+                                        type=c.gen.value;
+                                        date=c.t.text;
+                                        id1=id.toString();
                               }, child: Text("ADD",style: TextStyle(fontSize: 20,color: Colors.white),)),
                             ],)
                           ],

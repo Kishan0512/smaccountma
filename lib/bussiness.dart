@@ -13,6 +13,7 @@ class bussiness extends GetxController
       RxList debit=[].obs;
       RxList balance=[].obs;
       RxList id=[].obs;
+      RxString gen="male".obs;
 List<Map> m=[];
 Future get_database()
   async {
@@ -23,6 +24,8 @@ Future get_database()
           // When creating the db, create the table
           await db.execute(
               'CREATE TABLE demo (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)');
+          await db.execute(
+              'CREATE TABLE tran (id INTEGER PRIMARY KEY AUTOINCREMENT,nid TEXT,date TEXT, perticuler TEXT,credit INTEGER,debit INTEGER,balance INTEGER)');
         });
   }
   Future get_account()async
@@ -56,5 +59,6 @@ Future get_database()
     String qur="update demo set name='$name1' where id=$id1";
     database!.rawUpdate(qur);
   }
+
 
 }
