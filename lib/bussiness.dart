@@ -59,6 +59,4 @@ Future get_database()
     String qur="update demo set name='$name1' where id=$id1";
     database!.rawUpdate(qur);
   }
-
-
 }
