@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smaccountma/bussiness.dart';
+import 'package:smaccountma/data.dart';
 
 class passbook extends StatelessWidget {
   bussiness c =Get.put(bussiness());
-  int id;
-  String name;
-  DateTime? date;
-  passbook(this.id, this.name)
+  Account a;
+  passbook(this.a,context)
   {
-    c.t.text=DateTime.now().toString().substring(0,10);
+    showDatePicker(context: context, initialDate: DateTime.now(), firstDate:DateTime(2000) , lastDate: DateTime(2025)).then((value) {
+      t1.text="${value!.day}/${value.month}/${value.year}";
+    });
   }
-
-
+  TextEditingController t1 =TextEditingController();
   TextEditingController t2 =TextEditingController();
   TextEditingController t3 =TextEditingController();
   @override
@@ -20,7 +20,7 @@ class passbook extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Colors.purple.shade900,
-          title: Text("$name"),
+          title: Text("${a.name}"),
           actions: [
             IconButton(
                   onPressed: () {
@@ -33,21 +33,20 @@ class passbook extends StatelessWidget {
                           actions: [
                             Row(
                               children: [
-                                Expanded(child:  Container(child: TextField(controller: c.t,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),)),
-                                IconButton(onPressed: () async {
-                                  date= await showDatePicker(context: context, initialDate: DateTime.now(), firstDate:DateTime(2000) , lastDate: DateTime(2025));
-                                  if(date!=null)
-                                  {
-                                   c.t.text=DateTime.now().toString().substring(0,10);
-                                  }}, icon:Icon(Icons.date_range)),
+                                TextField(readOnly: true,onTap: () {
+                                  showDatePicker(context: context, initialDate: DateTime.now(), firstDate:DateTime(2000) , lastDate: DateTime(2025)).then((value) {
+                                    t1.text="${value!.day}/${value.month}/${value.year}";
+                                  });
+
+                                },controller: t1,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
                               ],),
                             Obx( ()=> Row(children: [
-                                Radio(value: "c", groupValue: c.gen.value, onChanged: (value) {
-                                  c.gen.value=value! as String;
+                                Radio(value: c.r1, groupValue: c.gvalue.value, onChanged: (value) {
+                                  c.gvalue.value=c.r1;
                                 },),
                                 Text("Credit(+)",style: TextStyle(fontSize: 20),),
-                                Radio(value: "d", groupValue: c.gen.value, onChanged: (value) {
-                                  c.gen.value=value! as String;
+                                Radio(value: c.r2, groupValue: c.gvalue.value, onChanged: (value) {
+                                  c.gvalue.value=c.r2;
                                 },),
                               Text("Debit(-)",style: TextStyle(fontSize: 20),),
                               ],),
@@ -56,17 +55,17 @@ class passbook extends StatelessWidget {
                             TextField(controller: t3,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),decoration: InputDecoration(hintText: "Particular")),
                             Row(mainAxisAlignment: MainAxisAlignment.end,children: [
                               TextButton(onPressed: () {
+                                t1.clear();
                                       t2.clear();
                                       t3.clear();
                                       Navigator.pop(context);
                               }, child: Text("CANCEL",style: TextStyle(fontSize: 20),)),
                               TextButton(style: ButtonStyle(backgroundColor: MaterialStateColor.resolveWith((states) => Colors.purple.shade900)),onPressed: () {
-                                        String date,part,id1,type;
-                                        int amount=int.parse(t2.text.toString());
-                                        part=t3.text;
-                                        type=c.gen.value;
-                                        date=c.t.text;
-                                        id1=id.toString();
+                                c.insert_transaction(t1.text, t2.text, c.gvalue.value, t3.text, a.id!);
+                                t1.text="";
+                                t2.text="";
+                                t3.text="";
+                                Navigator.pop(context);
                               }, child: Text("ADD",style: TextStyle(fontSize: 20,color: Colors.white),)),
                             ],)
                           ],
@@ -115,6 +114,7 @@ class passbook extends StatelessWidget {
                       child: Text("Debit(₹)", style: TextStyle(fontSize: 12)))),
             ],
           ),
+
         ],
       ),
       bottomNavigationBar: Row(

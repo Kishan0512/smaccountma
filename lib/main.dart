@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smaccountma/bussiness.dart';
+import 'package:smaccountma/data.dart';
 import 'package:smaccountma/passbook.dart';
 
 void main() {
@@ -11,7 +12,7 @@ class dashbord extends StatelessWidget {
   bussiness c = Get.put(bussiness());
 
   dashbord() {
-    c.get_database().then((value) => c.get_account());
+   c.get_account();
   }
 
   TextEditingController t = TextEditingController();
@@ -33,12 +34,12 @@ class dashbord extends StatelessWidget {
           ]),
       body: c.temp.value
           ? Obx(
-              () => ListView.builder(
-                itemCount: c.name.length,
+              () => ListView.builder(itemCount: c.list.length,
                 itemBuilder: (context, index) {
+                  Account a=Account.frommap(c.list.value[index]);
                   return InkWell(onTap: () {
                     Navigator.push(context, MaterialPageRoute(builder: (context) {
-                      return passbook(c.id[index],c.name[index]);
+                      return passbook(a,context);
                     },));
                   },
                     child: Card(
@@ -52,14 +53,14 @@ class dashbord extends StatelessWidget {
                                 children: [
                                   Expanded(
                                       child: Text(
-                                    "   ${c.name.value[index]}",
+                                    "   ${a.name![index]}",
                                     style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold),
                                   )),
                                   IconButton(
                                       onPressed: () {
-                                        t.text = c.name.value[index];
+                                        t.text = a.name![index];
                                         showDialog(
                                           context: context,
                                           builder: (context) {
@@ -89,7 +90,7 @@ class dashbord extends StatelessWidget {
                                                         onPressed: () {
                                                           String name1 = t.text;
                                                           c.update_account(
-                                                              c.id.value[index],
+                                                              a.id!,
                                                               name1);
                                                           Navigator.pop(context);
                                                           c
@@ -140,7 +141,7 @@ class dashbord extends StatelessWidget {
                                                                             .shade900)),
                                                         onPressed: () {
                                                           c.delete_account(
-                                                              c.id.value[index]);
+                                                              a.id!);
                                                           Navigator.pop(context);
                                                           c
                                                               .get_account()
