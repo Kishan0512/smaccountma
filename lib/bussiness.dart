@@ -122,7 +122,13 @@ Future<Database> get_database()
   update_account(int id1,String name1)
   {get_database().then((value) {
     String qur="update demo set name='$name1' where id=$id1";
-    value.rawUpdate(qur);});
+    value.rawUpdate(qur);
+    if(value==1)
+    {
+      get_account();
+    }
+  });
+
   }
   insert_transaction(String date,String amount,String type,String reason,int id)
   {
@@ -134,6 +140,34 @@ Future<Database> get_database()
         if(value>=1)
         {
           get_transaction(id);
+        }
+      });
+    });
+  }
+  delete_transaction(int id,int acid)
+  {
+    //id INTEGER PRIMARY KEY, acid INTEGER, date TEXT, amount INTEGER,type TEXT,reason TEXT
+    get_database().then((value) {
+      String q="delete from accnt_trans where id=$id";
+      value.rawInsert(q).then((value){
+        print(value);
+        if(value>=1)
+        {
+          get_transaction(acid);
+        }
+      });
+    });
+  }
+  update_transaction(String date,String amount,String type,String reason,int id,int acid)
+  {
+    //acid INTEGER, date TEXT, amount INTEGER,type TEXT,reason TEXT
+    get_database().then((value) {
+      String q="update accnt_trans set date='$date',amount='$amount',type='$type',reason='$reason' where id='$id'";
+      value.rawUpdate(q).then((value){
+        print(value);
+        if(value==1)
+        {
+          get_transaction(acid);
         }
       });
     });
