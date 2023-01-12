@@ -205,17 +205,18 @@ class passbook extends StatelessWidget {
           ],
           ),
           ],),
-      bottomNavigationBar: Row(
-        children: [
-        Expanded(child: Container(alignment: Alignment.center,color: Colors.grey.shade100,height: 70,child: Text(
-      "Credit(↑)\n₹"),)),
-        Expanded(child: Container(alignment: Alignment.center,height: 70,color: Colors.black12,child: Text(
-            "Debit(↓)\n₹"))),
-        Expanded(child: Container(alignment: Alignment.center,height: 70,color: Colors.purple.shade900, child: Text(
-          "Balance\n₹",
-          style: TextStyle(color: Colors.white),
-        ))),
-      ],),
+      bottomNavigationBar: Obx(()=>Row(
+          children: [
+          Expanded(child: Container(alignment: Alignment.center,color: Colors.grey.shade100,height: 70,child: Text(
+        "Credit(↑)\n₹${c.credit}"),)),
+          Expanded(child: Container(alignment: Alignment.center,height: 70,color: Colors.black12,child: Text(
+              "Debit(↓)\n₹${c.debit}"))),
+          Expanded(child: Container(alignment: Alignment.center,height: 70,color: Colors.purple.shade900, child: Text(
+            "Balance\n₹${c.total}",
+            style: TextStyle(color: Colors.white),
+          ))),
+        ],),
+      ),
     );
   }
 }
