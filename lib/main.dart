@@ -10,15 +10,10 @@ void main() {
 
 class dashbord extends StatelessWidget {
   bussiness c = Get.put(bussiness());
-
-  dashbord() {
-   c.get_account();
-  }
-
-  TextEditingController t = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
+    TextEditingController t = TextEditingController();
+    c.get_account();
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Colors.purple.shade900,
@@ -32,8 +27,7 @@ class dashbord extends StatelessWidget {
               ],
             )
           ]),
-      body: c.temp.value
-          ? Obx(
+      body: c.temp.value?Obx(
               () => ListView.builder(itemCount: c.list.length,
                 itemBuilder: (context, index) {
                   Account a=Account.frommap(c.list.value[index]);
@@ -53,14 +47,14 @@ class dashbord extends StatelessWidget {
                                 children: [
                                   Expanded(
                                       child: Text(
-                                    "   ${a.name![index]}",
+                                    "   ${a.name}",
                                     style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold),
                                   )),
                                   IconButton(
                                       onPressed: () {
-                                        t.text = a.name![index];
+                                        t.text = a.name as String;
                                         showDialog(
                                           context: context,
                                           builder: (context) {
@@ -210,11 +204,7 @@ class dashbord extends StatelessWidget {
                   );
                 },
               ),
-            )
-          : Center(
-              child: CircularProgressIndicator(
-              color: Colors.purple.shade900,
-            )),
+            ):Center(child: CircularProgressIndicator(color: Colors.purple.shade900),),
       drawer: Drawer(
         backgroundColor: Colors.purple.shade900,
         shape: UnderlineInputBorder(borderRadius: BorderRadius.circular(30)),
@@ -252,9 +242,6 @@ class dashbord extends StatelessWidget {
                             c.add_account(name);
                             Navigator.pop(context);
                             t.text = "";
-                            c.get_account().then((value) {
-                              c.temp.value = true;
-                            });
                           },
                           child: Text(
                             "SAVE",

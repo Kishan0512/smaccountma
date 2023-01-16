@@ -5,7 +5,7 @@ import 'package:path/path.dart';
 class bussiness extends GetxController
 {
 
-
+  String? date;
   RxBool temp=false.obs;
   RxList list=[].obs;
   RxList templist=[].obs;
@@ -26,14 +26,14 @@ List<Map> m=[];
 Future<Database> get_database()
   async {
     var databasesPath = await getDatabasesPath();
-    String path = join(databasesPath, 'account.db');
+    String path = join(databasesPath, 'sm.db');
     Database database = await openDatabase(path, version: 1,
         onCreate: (Database db, int version) async {
           // When creating the db, create the table
           await db.execute(
-              'CREATE TABLE account (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)');
+              'CREATE TABLE account1 (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)');
           await db.execute(
-              'CREATE TABLE account_tran (id INTEGER PRIMARY KEY, acid INTEGER, date TEXT, amount INTEGER,type TEXT,reason TEXT)');
+              'CREATE TABLE account1_tran (id INTEGER PRIMARY KEY, acid INTEGER, date TEXT, amount INTEGER,type TEXT,reason TEXT)');
         });
     return database;
   }
@@ -43,12 +43,13 @@ Future<Database> get_database()
 
     temp.value=false;
     get_database().then((value) {
-    String qur="select * from demo";
+    String qur="select * from account1";
     value.rawQuery(qur).then((value){
       list.value=value;
       list.forEach((element) {
         getaccbyid(element['id']);
       });
+      temp.value=true;
     });
     });
 
@@ -57,7 +58,7 @@ Future<Database> get_database()
 
     //select * from account join accnt_trans on account.id=accnt_trans.acid where account.id=1
     get_database().then((value) {
-      String q="select * from account join account_tran on account.id=account_tran.acid where account.id=$id";
+      String q="select * from account1 join account1_tran on account1.id=account1_tran.acid where account1.id=$id";
       value.rawQuery(q).then((value){
         credit1.value=0;
         debit1.value=0;
@@ -87,7 +88,7 @@ Future<Database> get_database()
     debit.value=0;
 
     get_database().then((value) {
-      String q="select * from accnt_trans where acid=$id";
+      String q="select * from account1_tran where acid=$id";
       value.rawQuery(q).then((value){
         trans_list.value=value;
         trans_list.forEach((element) {
@@ -111,22 +112,37 @@ Future<Database> get_database()
   }
   add_account(String name1)
   { get_database().then((value) {
-    String qur="insert into demo values(null,'$name1')";
-    value.rawInsert(qur);});
+    String qur="insert into account1 values(null,'$name1')";
+    value.rawInsert(qur).then((value) {
+      if(value>=1)
+      {
+        get_account();
+      }
+    });
+
+  });
   }
   delete_account(int id1)
   {get_database().then((value) {
-    String qur="delete from demo where id=$id1";
-    value.rawDelete(qur);});
+    String qur="delete from account1 where id=$id1";
+    value.rawDelete(qur).then((value) {
+    if(value==1)
+    {
+        get_account();
+  }
+    });
+
+  });
   }
   update_account(int id1,String name1)
   {get_database().then((value) {
-    String qur="update demo set name='$name1' where id=$id1";
-    value.rawUpdate(qur);
+    String qur="update account1 set name='$name1' where id=$id1";
+    value.rawUpdate(qur).then((value) {
     if(value==1)
     {
       get_account();
     }
+    });
   });
 
   }
@@ -134,7 +150,7 @@ Future<Database> get_database()
   {
     //id INTEGER PRIMARY KEY, acid INTEGER, date TEXT, amount INTEGER,type TEXT,reason TEXT
     get_database().then((value) {
-      String q="insert into accnt_trans values (null,'$id','$date','$amount','$type','$reason')";
+      String q="insert into account1_tran values (null,'$id','$date','$amount','$type','$reason')";
       value.rawInsert(q).then((value){
         print(value);
         if(value>=1)
@@ -148,7 +164,7 @@ Future<Database> get_database()
   {
     //id INTEGER PRIMARY KEY, acid INTEGER, date TEXT, amount INTEGER,type TEXT,reason TEXT
     get_database().then((value) {
-      String q="delete from accnt_trans where id=$id";
+      String q="delete from account1_tran where id=$id";
       value.rawInsert(q).then((value){
         print(value);
         if(value>=1)
@@ -162,7 +178,7 @@ Future<Database> get_database()
   {
     //acid INTEGER, date TEXT, amount INTEGER,type TEXT,reason TEXT
     get_database().then((value) {
-      String q="update accnt_trans set date='$date',amount='$amount',type='$type',reason='$reason' where id='$id'";
+      String q="update account1_tran set date='$date',amount='$amount',type='$type',reason='$reason' where id='$id'";
       value.rawUpdate(q).then((value){
         print(value);
         if(value==1)
