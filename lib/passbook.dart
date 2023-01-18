@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smaccountma/bussiness.dart';
 import 'package:smaccountma/data.dart';
-import 'package:smaccountma/main.dart';
 
 class passbook extends StatelessWidget {
   bussiness c =Get.put(bussiness());
