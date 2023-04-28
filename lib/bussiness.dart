@@ -39,22 +39,20 @@ Future<Database> get_database()
   }
   Future get_account()async
   {
-
-
     temp.value=false;
     get_database().then((value) {
     String qur="select * from account1";
     value.rawQuery(qur).then((value){
       list.value=value;
-      list.forEach((element) {
-        getaccbyid(element['id']);
+      list.forEach((element) async {
+       await getaccbyid(element['id']);
       });
       temp.value=true;
     });
     });
 
   }
-  getaccbyid(int id) {
+   Future getaccbyid(int id) {
 
     //select * from account join accnt_trans on account.id=accnt_trans.acid where account.id=1
     get_database().then((value) {
@@ -82,6 +80,7 @@ Future<Database> get_database()
       });
       // print("templist=${templist.value}");
     });
+        return Future.value(true);
   }
   get_transaction(int id) {
     credit.value=0;
